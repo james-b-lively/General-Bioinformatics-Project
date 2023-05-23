@@ -1,0 +1,56 @@
+```{r}
+library(Seurat)
+#set home directory to find required files
+R.home(component = "home") 
+
+#Open compressed file as pbmc, list parameters available for differential expression operation 
+pbmc <- readRDS(file = "pbmc3k_final.rds")
+levels(pbmc)
+```
+
+```{r}
+#Look at CD14+ and FCGR3A+ Monocyte parameters, return features that are differentially expressed, show headers
+monocyte.de.markers <- FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = "FCGR3A+ Mono")
+head(monocyte.de.markers)
+```
+
+```{r}
+# Compare the CD14+ differentially expressed features to all cells, show headers
+monocyte.de.markers <- FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = NULL, only.pos = TRUE)
+head(monocyte.de.markers)
+```
+
+
+```{r}
+# Only show headers of features that CD14+ or FCGR3A+ possess and are greater than 50%
+head(FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = "FCGR3A+ Mono", min.pct = 0.5))
+```
+
+
+```{r}
+# Only show headers of features that are less than 2X dissimilar from the average values of CD14+ vs FCGR3A+
+head(FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = "FCGR3A+ Mono", logfc.threshold = log(2)))
+```
+
+
+```{r}
+# Only show headers of features shared by two groups (CD14+, FCGR3A+) with at least 25% similarity
+head(FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = "FCGR3A+ Mono", min.diff.pct = 0.25))
+```
+
+```{r}
+# Only show headers of features from a random sample of two groups(CD14+, FCGR3A+) 
+head(FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = "FCGR3A+ Mono", max.cells.per.ident = 200))
+```
+
+
+```{r}
+# Only show headers of differentially expressed features between two groups(CD14+, FCGR3A+) utilizing MAST
+head(FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = "FCGR3A+ Mono", test.use = "MAST"))
+```
+
+
+```{r}
+# Only show headers of features that are less than 2X dissimilar from the average values of CD14+ vs FCGR3A+
+head(FindMarkers(pbmc, ident.1 = "CD14+ Mono", ident.2 = "FCGR3A+ Mono", test.use = "DESeq2", max.cells.per.ident = 50))
+```
